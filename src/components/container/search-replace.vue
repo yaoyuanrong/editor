@@ -1,24 +1,9 @@
 <template>
-  <modal
-    :visible="searchReplace"
-    icon="search-replace"
-    :header="t('search.title')"
-    :footer="false"
-    class="umo-search-replace-dialog"
-    width="420px"
-    mode="modeless"
-    :z-index="200"
-    @close="searchReplace = false"
-  >
+  <modal :visible="searchReplace" icon="search-replace" :header="t('search.title')" :footer="false"
+    class="umo-search-replace-dialog" width="420px" mode="modeless" :z-index="200" @close="searchReplace = false">
     <div class="umo-search-replace-container">
       <div class="umo-search-text">
-        <t-input
-          v-model="searchText"
-          :placeholder="t('search.searchText')"
-          clearable
-          autofocus
-          @enter="next"
-        >
+        <t-input v-model="searchText" :placeholder="t('search.searchText')" clearable autofocus @enter="next">
           <template #suffix>
             {{
               searchText !== '' && resultLength !== 0
@@ -29,29 +14,15 @@
             {{ resultLength }}
           </template>
         </t-input>
-        <t-button
-          :disabled="resultLength === 0"
-          shape="square"
-          variant="text"
-          @click="next"
-        >
+        <t-button :disabled="resultLength === 0" shape="square" variant="text" @click="next">
           <icon name="arrow-down" class="icon-next" />
         </t-button>
-        <t-button
-          :disabled="resultLength === 0"
-          shape="square"
-          variant="text"
-          @click="previous"
-        >
+        <t-button :disabled="resultLength === 0" shape="square" variant="text" @click="previous">
           <icon name="arrow-down" class="icon-prev" />
         </t-button>
       </div>
       <div class="umo-replace-text">
-        <t-input
-          v-model="replaceText"
-          :placeholder="t('search.replaceText')"
-          clearable
-        />
+        <t-input v-model="replaceText" :placeholder="t('search.replaceText')" clearable />
       </div>
       <div class="umo-advanced-options">
         <t-checkbox v-model="caseSensitive">
@@ -59,28 +30,13 @@
         </t-checkbox>
       </div>
       <div class="umo-button-actions">
-        <t-button
-          :disabled="resultLength === 0"
-          theme="default"
-          variant="text"
-          @click="replace"
-          v-text="t('search.replace')"
-        >
+        <t-button :disabled="resultLength === 0" theme="default" variant="text" @click="replace"
+          v-text="t('search.replace')">
         </t-button>
-        <t-button
-          :disabled="resultLength === 0"
-          theme="default"
-          variant="text"
-          @click="replaceAll"
-          v-text="t('search.replaceAll')"
-        >
+        <t-button :disabled="resultLength === 0" theme="default" variant="text" @click="replaceAll"
+          v-text="t('search.replaceAll')">
         </t-button>
-        <t-button
-          :disabled="resultLength === 0"
-          theme="primary"
-          @click="next"
-          v-text="t('search.search')"
-        ></t-button>
+        <t-button :disabled="resultLength === 0" theme="primary" @click="next" v-text="t('search.search')"></t-button>
       </div>
     </div>
   </modal>
@@ -131,7 +87,7 @@ const goToSelection = () => {
   const { node } = editor.value.view.domAtPos(
     editor.value.state.selection.anchor,
   )
-  ;(node as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' })
+    ; (node as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
 watch(
@@ -188,35 +144,44 @@ watch(
 .umo-search-text {
   margin-top: 5px;
   display: flex;
+
   :deep(.umo-input__wrap) {
     width: 300px;
     margin-right: 10px;
+
     .umo-input__suffix {
       font-size: 12px;
       opacity: 0.6;
     }
   }
+
   :deep(.umo-button) {
     .umo-icon {
       font-size: 20px;
+
       &.icon-prev {
         transform: rotate(-180deg);
       }
     }
   }
 }
+
 .umo-replace-text {
   margin-top: 12px;
 }
+
 .umo-advanced-options {
   margin-top: 12px;
+
   :deep(.umo-checkbox) {
     margin-right: 15px;
   }
 }
+
 .umo-button-actions {
   margin: 12px 0 -15px;
   text-align: right;
+
   :deep(.umo-button) {
     margin-left: 10px;
   }
@@ -231,6 +196,7 @@ watch(
     user-select: none;
   }
 }
+
 .umo-editor-container.toolbar-classic {
   .umo-search-replace-dialog {
     .umo-dialog {

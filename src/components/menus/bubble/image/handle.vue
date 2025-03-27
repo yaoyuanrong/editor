@@ -1,7 +1,7 @@
 <template>
   <menus-button ico="image-handle" :text="t('bubbleMenu.image.handle')" @menu-click="openImageViewer" />
-  <modal :visible="searchReplace" header="图片处理" :footer="false" class="umo-search-replace-dialog" width="90vw"
-    mode="modeless" :z-index="200" @close="searchReplace = false">
+  <modal :visible="searchReplace" header="图片处理" :footer="false" class="umo-search-replace-dialog" mode="modeless"
+    :z-index="200" @close="searchReplace = false">
     <div class="image-editor-modal">
       <div class="image-editor-container">
         <div id="canvas-container" class="canvas-container">
@@ -26,18 +26,15 @@
 import { getSelectionNode } from '@/extensions/selection'
 import { base64ToFile } from 'file64'
 import { shortId } from '@/utils/short-id'
+const container = inject('container')
 
 let editor = inject('editor')
-let imageViewer = inject('imageViewer')
 
 let searchReplace = $ref(false)
 let img = $ref('')
 
 // 编辑器内容引用
-let editorContent = $ref(null);
-let imageInput = $ref(null);
 let imageCanvas = $ref(null);
-let showImageEditor = $ref(false);
 
 // 图像编辑相关状态
 let currentTool = $ref('');
@@ -55,8 +52,6 @@ let openImageViewer = () => {
   console.log(image)
   img = image.attrs.src
   openImageEditor(img)
-  // imageViewer.current = image.attrs.id
-  // imageViewer.visible = true
 }
 
 // 打开图片编辑器
@@ -77,13 +72,13 @@ let openImageEditor = (imageSrc: string) => {
     let containerWidth: number = container.clientWidth;
     let containerHeight: number = container.clientHeight;
     let scale = Math.min(
-      Math.max(containerWidth / img.width, 0.5), // 至少 50vw
-      Math.max(containerHeight / img.height, 0.5) // 至少 50vh
+      Math.max(containerWidth / img.width, 1), // 至少 50vw
+      Math.max(containerHeight / img.height, 1) // 至少 50vh
     );
 
     // 设置 Canvas 尺寸
-    canvas.width = img.width * scale;
-    canvas.height = img.height * scale;
+    canvas.width = container.width = img.width * scale;
+    canvas.height = container.height = img.height * scale;
 
     // 获取 Canvas 上下文
     canvasContext = canvas.getContext('2d');
@@ -104,8 +99,10 @@ let startDrawing = (event: any) => {
 
   let canvas = imageCanvas;
   let rect = canvas.getBoundingClientRect();
-  lastX = event.clientX - rect.left;
-  lastY = event.clientY - rect.top;
+
+  // 使用 offsetX 和 offsetY 来获取相对于画布的准确坐标
+  lastX = event.offsetX;
+  lastY = event.offsetY;
 };
 
 // 绘制
@@ -114,9 +111,10 @@ let draw = (event: any) => {
 
   let canvas = imageCanvas;
   let ctx = canvasContext;
-  let rect = canvas.getBoundingClientRect();
-  let currentX = event.clientX - rect.left;
-  let currentY = event.clientY - rect.top;
+
+  // 同样使用 offsetX 和 offsetY
+  let currentX = event.offsetX;
+  let currentY = event.offsetY;
 
   if (currentTool === 'mosaic') {
     // 绘制马赛克
@@ -139,7 +137,7 @@ let draw = (event: any) => {
 
     // 绘制红框
     ctx.strokeStyle = 'red';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = brushSize / 10;
     ctx.beginPath();
     ctx.rect(lastX, lastY, currentX - lastX, currentY - lastY);
     ctx.stroke();
@@ -160,13 +158,13 @@ let stopDrawing = () => {
 
 // 取消图片编辑
 let cancelImageEdit = () => {
-  showImageEditor = false;
+  searchReplace = false;
   currentEditingImg = null;
 };
 
-// const { node, updateAttributes } = defineProps(nodeViewProps)
 const options = inject('options')
 // 确认图片编辑
+
 let confirmImageEdit = async () => {
   // 将编辑后的图像插入编辑器
   let canvas = imageCanvas;
@@ -181,32 +179,39 @@ let confirmImageEdit = async () => {
   }
   const filename = shortId(10)
 
-  const file = await base64ToFile(imageDataURL, `${filename}.${ext}`, {
-    type,
-  })
-  console.log(file)
-  // const { id, url } =
-  //     (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
+
+  try {
+    const file = await base64ToFile(imageDataURL, `${filename}.${ext}`, {
+      type,
+    })
+    const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
+    const image = editor.value ? getSelectionNode(editor.value) : null
+    if (image) {
+      editor.value?.commands.updateAttributes(image.type, {
+        id,
+        src: url,
+        uploaded: false,
+        file,
+      })
+    }
+    cancelImageEdit()
+  } catch (error) {
+    const dialog = useAlert({
+      attach: container,
+      theme: 'warning',
+      header: '错误',
+      body: '图片出错了',
+      confirmBtn: '图片出错了',
+      onConfirm() {
+        dialog.destroy()
+      },
+    })
+  }
 
   currentEditingImg = null;
 };
 
-const uploadImage = async () => {
-  if (node.attrs.uploaded || !node.attrs.file) {
-    return
-  }
-  try {
 
-    // if (containerRef.value) {
-    //   updateAttributes({ id, src: url, file: null, uploaded: true })
-    // }
-  } catch (error) {
-    // useMessage('error', {
-    //   attach: container,
-    //   content: (error as Error).message,
-    // })
-  }
-}
 function generateSmoothMosaicColor(ctx: CanvasRenderingContext2D, x: number, y: number, pixelSize: number) {
   const sampledPixels: any = [];
   // 更智能地采样像素
@@ -273,26 +278,27 @@ function generateSmoothMosaicColor(ctx: CanvasRenderingContext2D, x: number, y: 
 
 
 </script>
+<style lang="less">
+.umo-search-replace-dialog {
+  .umo-dialog {
+    width: auto;
+    right: auto;
+    top: 10px;
+  }
+}
+</style>
 <style lang="less" scoped>
 .canvas-container {
   // border: 1px solid #ddd;
-  max-width: min(90vw, 1000px);
-  max-height: min(90vh, 800px);
+  // max-width: min(90vw, 1000px);
+  // max-height: min(90vh, 800px);
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
 
-  /* 防止内容溢出 */
   canvas {
-    min-width: 50vw;
-    /* 最小宽度为视口宽度的 50% */
-    min-height: 50vh;
-    /* 最小高度为视口高度的 50% */
-    max-width: 100%;
-    /* 最大宽度不超过容器 */
-    max-height: 100%;
-    /* 最大高度不超过容器 */
+
     object-fit: contain;
     /* 保持图片比例 */
   }

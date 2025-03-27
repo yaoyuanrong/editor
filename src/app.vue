@@ -89,8 +89,14 @@ const options = $ref({
     if (!file) {
       throw new Error('没有找到要上传的文件')
     }
-    console.log('onUpload', file, URL.createObjectURL(file))
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+    // await new Promise((resolve) => setTimeout(resolve, 3000))
+    console.log({
+      id: shortId(),
+      url: file.url ?? URL.createObjectURL(file),
+      name: file.name,
+      type: file.type,
+      size: file.size,
+    })
     return {
       id: shortId(),
       url: file.url ?? URL.createObjectURL(file),

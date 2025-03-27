@@ -172,7 +172,6 @@ export default Node.create({
       selectFiles:
         (type, container = 'body', uploadFileMap, autoType = true) =>
         ({ editor }) => {
-          console.log(editor)
           const { options } = editor.storage
           const accept = getAccept(type, options.file.allowedMimeTypes)
           if ((!accept && accept !== '') || accept === 'notAllow') {

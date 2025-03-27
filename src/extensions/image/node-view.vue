@@ -91,13 +91,13 @@ const uploadImage = async () => {
   }
 }
 const onLoad = async () => {
-  // updateAttributes({ error: false })
+  updateAttributes({ uploaded: true })
   if (node.attrs.width === null) {
     const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
     const ratio = clientWidth / clientHeight
     maxWidth = containerRef.value?.$el.clientWidth
     maxHeight = maxWidth / ratio
-    updateAttributes({ width: (200 * ratio).toFixed(2) })
+    updateAttributes({ width: (200 * ratio).toFixed(2), uploaded: true })
   }
   if ([null, 'auto', 0].includes(node.attrs.height)) {
     await nextTick()
