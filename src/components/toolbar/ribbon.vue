@@ -1,13 +1,8 @@
 <template>
   <div class="umo-ribbon-menu">
     <div v-if="menus.length > 1" class="umo-ribbon-tabs">
-      <div
-        v-for="item in menus"
-        :key="item.value"
-        class="umo-ribbon-tabs-item"
-        :class="{ active: currentMenu === item.value }"
-        @click="changeMenu(item.value)"
-      >
+      <div v-for="item in menus" :key="item.value" class="umo-ribbon-tabs-item"
+        :class="{ active: currentMenu === item.value }" @click="changeMenu(item.value)">
         {{ item.label }}
       </div>
     </div>
@@ -43,18 +38,12 @@
           </div>
           <div class="umo-virtual-group">
             <div class="umo-virtual-group-row">
-              <menus-toolbar-base-ordered-list
-                v-if="!disableItem('ordered-list')"
-              />
-              <menus-toolbar-base-bullet-list
-                v-if="!disableItem('bullet-list')"
-              />
+              <menus-toolbar-base-ordered-list v-if="!disableItem('ordered-list')" />
+              <menus-toolbar-base-bullet-list v-if="!disableItem('bullet-list')" />
               <menus-toolbar-base-task-list v-if="!disableItem('task-list')" />
               <menus-toolbar-base-indent />
               <menus-toolbar-base-outdent />
-              <menus-toolbar-base-line-height
-                v-if="!disableItem('line-height')"
-              />
+              <menus-toolbar-base-line-height v-if="!disableItem('line-height')" />
               <menus-toolbar-base-margin v-if="!disableItem('margin')" />
             </div>
             <div class="umo-virtual-group-row">
@@ -65,21 +54,19 @@
               <menus-toolbar-base-align-distributed />
               <menus-toolbar-base-quote v-if="!disableItem('quote')" />
               <menus-toolbar-base-code v-if="!disableItem('code')" />
-              <menus-toolbar-base-select-all
-                v-if="!disableItem('select-all')"
-              />
+              <menus-toolbar-base-select-all v-if="!disableItem('select-all')" />
             </div>
           </div>
           <div class="umo-virtual-group">
             <menus-toolbar-base-heading />
           </div>
           <div class="umo-virtual-group">
-            <menus-toolbar-base-import-word />
-            <menus-toolbar-base-markdown v-if="!disableItem('markdown')" />
+            <!-- <menus-toolbar-base-import-word /> -->
+            <!-- <menus-toolbar-base-markdown v-if="!disableItem('markdown')" /> -->
             <menus-toolbar-base-search-replace />
           </div>
           <div class="umo-virtual-group">
-            <menus-toolbar-base-print v-if="!disableItem('print')" />
+            <!-- <menus-toolbar-base-print v-if="!disableItem('print')" /> -->
           </div>
           <div class="virtual-group is-slot">
             <slot name="toolbar_base" toolbar-mode="ribbon" />
@@ -89,34 +76,28 @@
           <div class="umo-virtual-group">
             <menus-toolbar-insert-link v-if="!disableItem('link')" />
             <menus-toolbar-insert-image v-if="!disableItem('image')" />
-            <menus-toolbar-insert-video v-if="!disableItem('video')" />
-            <menus-toolbar-insert-audio v-if="!disableItem('audio')" />
-            <menus-toolbar-insert-file v-if="!disableItem('file')" />
-            <menus-toolbar-insert-code-block
-              v-if="!disableItem('code-block')"
-            />
+            <!-- <menus-toolbar-insert-video v-if="!disableItem('video')" /> -->
+            <!-- <menus-toolbar-insert-audio v-if="!disableItem('audio')" /> -->
+            <!-- <menus-toolbar-insert-file v-if="!disableItem('file')" /> -->
+            <!-- <menus-toolbar-insert-code-block v-if="!disableItem('code-block')" /> -->
             <menus-toolbar-insert-symbol v-if="!disableItem('symbol')" />
-            <menus-toolbar-insert-chinese-date
-              v-if="!disableItem('chineseDate')"
-            />
+            <menus-toolbar-insert-chinese-date v-if="!disableItem('chineseDate')" />
             <menus-toolbar-insert-emoji v-if="!disableItem('emoji')" />
-            <menus-toolbar-insert-math v-if="!disableItem('math')" />
+            <!-- <menus-toolbar-insert-math v-if="!disableItem('math')" /> -->
             <menus-toolbar-insert-tag v-if="!disableItem('tag')" />
             <menus-toolbar-insert-columns v-if="!disableItem('columns')" />
             <menus-toolbar-insert-callout v-if="!disableItem('callout')" />
-            <menus-toolbar-insert-mention v-if="!disableItem('mention')" />
+            <!-- <menus-toolbar-insert-mention v-if="!disableItem('mention')" /> -->
             <menus-toolbar-insert-bookmark v-if="!disableItem('bookmark')" />
           </div>
           <div class="umo-virtual-group">
-            <menus-toolbar-insert-hard-break
-              v-if="!disableItem('hard-break')"
-            />
+            <menus-toolbar-insert-hard-break v-if="!disableItem('hard-break')" />
             <menus-toolbar-insert-hr v-if="!disableItem('hr')" />
             <menus-toolbar-insert-toc v-if="!disableItem('toc')" />
             <menus-toolbar-insert-text-box v-if="!disableItem('textBox')" />
           </div>
           <div class="umo-virtual-group">
-            <menus-toolbar-insert-template v-if="!disableItem('template')" />
+            <!-- <menus-toolbar-insert-template v-if="!disableItem('template')" /> -->
             <menus-toolbar-insert-web-page v-if="!disableItem('webPage')" />
           </div>
           <div class="virtual-group is-slot">
@@ -190,12 +171,10 @@
             <menus-toolbar-tools-diagrams v-if="!disableItem('diagrams')" />
             <menus-toolbar-tools-echarts v-if="!disableItem('echarts')" />
             <!-- <menus-toolbar-tools-mind-map v-if="!disableItem('mind-map')" /> -->
-            <menus-toolbar-tools-mermaid v-if="!disableItem('mermaid')" />
+            <!-- <menus-toolbar-tools-mermaid v-if="!disableItem('mermaid')" /> -->
           </div>
           <div class="umo-virtual-group">
-            <menus-toolbar-tools-chinese-case
-              v-if="!disableItem('chineseCase')"
-            />
+            <menus-toolbar-tools-chinese-case v-if="!disableItem('chineseCase')" />
           </div>
           <div class="umo-virtual-group">
             <slot name="toolbar_tools" toolbar-mode="ribbon" />
@@ -278,9 +257,11 @@ const changeMenu = async (menu: string) => {
 .umo-ribbon-menu {
   width: 100%;
 }
+
 .umo-ribbon-tabs {
   padding: 10px 10px 0;
   display: flex;
+
   &-item {
     font-size: var(--umo-font-size-small);
     margin-right: 25px;
@@ -288,8 +269,10 @@ const changeMenu = async (menu: string) => {
     display: flex;
     align-items: center;
     flex-direction: column;
+
     &:hover {
       font-weight: 600;
+
       &::after {
         display: block;
         content: '';
@@ -299,9 +282,11 @@ const changeMenu = async (menu: string) => {
         background-color: var(--umo-border-color);
       }
     }
+
     &.active {
       color: var(--umo-primary-color);
       font-weight: 600;
+
       &::after {
         display: block;
         content: '';
@@ -311,44 +296,55 @@ const changeMenu = async (menu: string) => {
         background-color: var(--umo-primary-color);
         transition: width 0.3s;
       }
+
       &:hover::after {
         width: 120%;
       }
     }
+
     @media screen and (max-width: 640px) {
       margin-right: 10px;
     }
   }
 }
+
 .umo-scrollable-container {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
 }
+
 .umo-ribbon-container {
   display: flex;
   height: 56px;
   flex-shrink: 0;
+
   .umo-virtual-group {
     padding: 0 20px;
     border-left: solid 1px var(--umo-border-color-light);
     flex-shrink: 0;
+
     &:empty {
       display: none;
     }
+
     &:first-child {
       padding-left: 0;
     }
+
     &:first-child,
     &.is-slot:empty {
       border-left: none;
     }
+
     &-row {
       display: flex;
       align-items: center;
+
       :deep(> *:not(:last-child)) {
         margin-right: 5px;
       }
+
       &:not(:last-child) {
         margin-bottom: 5px;
       }

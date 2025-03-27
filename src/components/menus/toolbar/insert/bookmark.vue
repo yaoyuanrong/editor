@@ -1,5 +1,5 @@
 <template>
-  <menus-button
+  <!-- <menus-button
     ico="bookmark"
     :text="t('insert.bookmark.text')"
     huge
@@ -60,7 +60,7 @@
         </t-form-item>
       </t-form>
     </div>
-  </modal>
+  </modal> -->
 </template>
 <script setup lang="ts">
 const container = inject('container')

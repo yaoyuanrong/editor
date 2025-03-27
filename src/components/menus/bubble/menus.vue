@@ -1,19 +1,15 @@
 <template>
-  <template
-    v-if="
-      editor?.isActive('toc') ||
-      editor?.isActive('pageBreak') ||
-      editor?.isActive('horizontalRule') ||
-      editor?.getAttributes('image').error
-    "
-  >
+  <template v-if="
+    editor?.isActive('toc') ||
+    editor?.isActive('pageBreak') ||
+    editor?.isActive('horizontalRule') ||
+    editor?.getAttributes('image').error
+  ">
     <!-- <menus-bubble-node-delete /> -->
   </template>
-  <template
-    v-else-if="
-      editor?.isActive('image') && !editor?.getAttributes('image').error
-    "
-  >
+  <template v-else-if="
+    editor?.isActive('image') && !editor?.getAttributes('image').error
+  ">
     <menus-toolbar-base-align-left />
     <menus-toolbar-base-align-center />
     <menus-toolbar-base-align-right />
@@ -23,69 +19,56 @@
     <menus-bubble-image-draggable />
     <menus-bubble-image-reset />
     <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-image-remove-background
+    <!-- <menus-bubble-image-remove-background
       v-if="
         editor?.getAttributes('image')?.type.startsWith('image') ||
         ['image/png', 'image/jpeg'].includes(
           editor?.getAttributes('image')?.type,
         )
       "
-    />
-    <menus-bubble-image-preview
-      v-if="
-        editor?.getAttributes('image')?.type.startsWith('image') ||
-        ['image/png', 'image/jpeg'].includes(
-          editor?.getAttributes('image')?.type,
-        )
-      "
-    />
+    /> -->
+    <menus-bubble-image-preview v-if="
+      editor?.getAttributes('image')?.type.startsWith('image') ||
+      ['image/png', 'image/jpeg'].includes(
+        editor?.getAttributes('image')?.type,
+      )
+    " />
+    <menus-bubble-image-handle />
     <menus-bubble-image-open />
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-image-edit />
-    <menus-bubble-node-duplicate
-      v-if="
-        editor?.isActive('image') && editor?.getAttributes('image').draggable
-      "
-    />
-    <menus-bubble-node-tofile
+    <menus-bubble-node-duplicate v-if="
+      editor?.isActive('image') && editor?.getAttributes('image').draggable
+    " />
+    <!-- <menus-bubble-node-tofile
       v-if="
         editor?.getAttributes('image').previewType !== null &&
         editor?.getAttributes('image').type.startsWith('image')
       "
-    />
+    /> -->
     <menus-bubble-node-delete />
   </template>
-  <template
-    v-else-if="
-      editor?.isActive('video') ||
-      editor?.isActive('audio') ||
-      editor?.isActive('file') ||
-      editor?.isActive('iframe')
-    "
-  >
+  <template v-else-if="
+    editor?.isActive('video') ||
+    editor?.isActive('audio') ||
+    editor?.isActive('file') ||
+    editor?.isActive('iframe')
+  ">
     <menus-toolbar-base-align-left />
     <menus-toolbar-base-align-center />
     <menus-toolbar-base-align-right />
     <div class="umo-bubble-menu-divider"></div>
     <menus-bubble-webpage-clickable />
-    <menus-toolbar-insert-web-page
-      v-if="!disableItem('webPage')"
-      ico="edit"
-      :page-type="editor?.getAttributes('iframe')?.type"
-      :page-url="editor?.getAttributes('iframe')?.src"
-    />
+    <menus-toolbar-insert-web-page v-if="!disableItem('webPage')" ico="edit"
+      :page-type="editor?.getAttributes('iframe')?.type" :page-url="editor?.getAttributes('iframe')?.src" />
     <menus-bubble-webpage-open />
     <div class="umo-bubble-menu-divider"></div>
-    <menus-bubble-file-download
-      v-if="
-        editor?.isActive('file') ||
-        editor?.isActive('video') ||
-        editor?.isActive('audio')
-      "
-    />
-    <menus-bubble-node-tofile
-      v-if="editor?.isActive('video') || editor?.isActive('audio')"
-    />
+    <menus-bubble-file-download v-if="
+      editor?.isActive('file') ||
+      editor?.isActive('video') ||
+      editor?.isActive('audio')
+    " />
+    <menus-bubble-node-tofile v-if="editor?.isActive('video') || editor?.isActive('audio')" />
     <menus-bubble-node-delete />
   </template>
   <template v-else-if="editor?.isActive('table')">
@@ -137,12 +120,9 @@
       <div class="umo-bubble-menu-divider"></div>
     </template>
     <menus-toolbar-base-font-size :select="false" />
-    <div
-      v-if="
-        !disableItem('font-size-increase') || !disableItem('font-size-decrease')
-      "
-      class="umo-bubble-menu-divider"
-    ></div>
+    <div v-if="
+      !disableItem('font-size-increase') || !disableItem('font-size-decrease')
+    " class="umo-bubble-menu-divider"></div>
     <menus-toolbar-base-bold />
     <menus-toolbar-base-italic />
     <menus-toolbar-base-underline />
@@ -181,6 +161,7 @@ const disableItem = (name: string) => {
   border-right: solid 1px var(--umo-border-color-light);
   height: 16px;
   margin: 0 10px 0 5px;
+
   &:last-child:is(.umo-bubble-menu-divider) {
     display: none;
   }

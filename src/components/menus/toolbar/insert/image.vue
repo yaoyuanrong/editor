@@ -4,7 +4,7 @@
     :text="t('insert.image')"
     huge
     @menu-click="
-      editor?.chain().focus().selectFiles('image', container, true).run()
+      editor?.chain().focus().selectFiles('image', container, true).run();
     "
   />
 </template>

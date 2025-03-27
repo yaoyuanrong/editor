@@ -45,6 +45,7 @@ export default Extension.create({
       setCurrentNodeSelection:
         () =>
         ({ editor, chain }) => {
+          console.log(1)
           editor.commands.selectParentNode()
           const { $anchor } = editor.state.selection
           return chain()
@@ -58,6 +59,8 @@ export default Extension.create({
           if (!node) {
             return false
           }
+          console.log(editor.isActive('image'))
+          console.log(node, node.attrs.vnode)
           if (node.attrs.vnode) {
             if (
               editor.isActive('image') ||
@@ -65,6 +68,7 @@ export default Extension.create({
               editor.isActive('audio') ||
               editor.isActive('file')
             ) {
+              console.log('image')
               const { options } = editor.storage
               const { id, src } = node.attrs
               options.onFileDelete?.(id, src)
@@ -76,6 +80,7 @@ export default Extension.create({
             return true
           }
           if (editor.isActive('table')) {
+            editor.commands.selectParentNode()
             chain().focus().deleteTable().run()
             return true
           }
@@ -89,9 +94,14 @@ export default Extension.create({
   },
 })
 export function getSelectionNode(editor: Editor) {
-  editor.commands.selectParentNode()
   // @ts-ignore
   const { $anchor, node } = editor.state.selection
+  // console.log('editor',editor)
+  // console.log('$anchor, node',$anchor.node(1), node)
+  if(node?.type?.isAtom) {
+    return node
+  }
+  editor.commands.selectParentNode()
   return $anchor.node(1) || node
 }
 export function getSelectionText(editor: Editor) {

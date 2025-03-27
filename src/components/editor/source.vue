@@ -1,17 +1,8 @@
 <template>
   <div class="umo-source-editor">
-    <monaco-editor
-      v-model:value="code"
-      :options="config"
-      language="html"
-      @mount="editorMount"
-      @change="codeChange"
-    >
+    <monaco-editor v-model:value="code" :options="config" language="html" @mount="editorMount" @change="codeChange">
       <template #loading>
-        <span
-          class="umo-source-editor-loading"
-          v-text="t('source.loading')"
-        ></span>
+        <span class="umo-source-editor-loading" v-text="t('source.loading')"></span>
       </template>
     </monaco-editor>
   </div>
@@ -65,14 +56,17 @@ const codeChange = () => {
 <style lang="less" scoped>
 .umo-source-editor {
   height: 100%;
+
   :deep(.monaco-editor) {
     .decorationsOverviewRuler {
       display: none !important;
     }
+
     .scrollbar .slider {
       border-radius: 3px;
     }
   }
+
   .umo-source-editor-loading {
     font-size: 12px;
     color: var(--umo-text-color-light);

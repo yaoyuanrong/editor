@@ -1,7 +1,7 @@
 <template>
   <div v-if="!page.preview?.enabled" class="umo-status-bar">
     <div class="umo-status-bar-left">
-      <tooltip :content="page.showToc ? t('toc.hide') : t('toc.show')">
+      <!-- <tooltip :content="page.showToc ? t('toc.hide') : t('toc.show')">
         <t-button
           class="umo-status-bar-button"
           :class="{ active: page.showToc }"
@@ -73,7 +73,7 @@
           <icon name="message" />
         </t-button>
       </tooltip>
-      <div class="umo-status-bar-split"></div>
+      <div class="umo-status-bar-split"></div> -->
       <t-popup
         v-if="editor"
         v-model="showWordCount"
@@ -211,7 +211,7 @@
           </t-button>
         </tooltip>
       </div>
-      <t-dropdown
+      <!-- <t-dropdown
         :attach="container"
         :options="langs"
         placement="top-left"
@@ -226,7 +226,7 @@
           v-text="lang"
         >
         </t-button>
-      </t-dropdown>
+      </t-dropdown> -->
     </div>
   </div>
   <div v-else class="umo-preview-bar">

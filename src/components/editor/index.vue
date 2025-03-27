@@ -1,24 +1,15 @@
 <template>
-  <editor-content
-    class="umo-editor-content"
-    :class="{
-      'show-bookmark': page.showBookmark,
-      'show-line-number': page.showLineNumber,
-      'format-painter': editor?.view?.painter?.enabled,
-      'is-empty': editor?.isEmpty && editor?.state.doc.childCount <= 1,
-      'is-readonly': !editor?.editable,
-    }"
-    :editor="editor"
-    :style="{
-      lineHeight: defaultLineHeight,
-    }"
-    :spellcheck="
-      options.document?.enableSpellcheck && $document.enableSpellcheck
-    "
-  />
-  <template
-    v-if="editor && !destroyed && !page.preview?.enabled && editor.isEditable"
-  >
+  <editor-content class="umo-editor-content" :class="{
+    'show-bookmark': page.showBookmark,
+    'show-line-number': page.showLineNumber,
+    'format-painter': editor?.view?.painter?.enabled,
+    'is-empty': editor?.isEmpty && editor?.state.doc.childCount <= 1,
+    'is-readonly': !editor?.editable,
+  }" :editor="editor" :style="{
+    lineHeight: defaultLineHeight,
+  }" :spellcheck="options.document?.enableSpellcheck && $document.enableSpellcheck
+      " />
+  <template v-if="editor && !destroyed && !page.preview?.enabled && editor.isEditable">
     <menus-context-block v-if="options.document?.enableBlockMenu" />
     <menus-bubble v-if="options.document?.enableBubbleMenu" />
   </template>

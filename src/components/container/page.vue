@@ -31,7 +31,7 @@
             transform: `scale(${pageOptions.zoomLevel ? pageOptions.zoomLevel / 100 : 1})`,
           }"
         >
-          <div class="umo-page-node-header" contenteditable="false">
+          <!-- <div class="umo-page-node-header" contenteditable="false">
             <div
               class="umo-page-corner corner-tl"
               style="width: var(--umo-page-margin-left)"
@@ -42,7 +42,7 @@
               class="umo-page-corner corner-tr"
               style="width: var(--umo-page-margin-right)"
             ></div>
-          </div>
+          </div> -->
           <div class="umo-page-node-content">
             <editor>
               <template #bubble_menu="props">
@@ -50,7 +50,7 @@
               </template>
             </editor>
           </div>
-          <div class="umo-page-node-footer" contenteditable="false">
+          <!-- <div class="umo-page-node-footer" contenteditable="false">
             <div
               class="umo-page-corner corner-bl"
               style="width: var(--umo-page-margin-left)"
@@ -60,7 +60,7 @@
               class="umo-page-corner corner-br"
               style="width: var(--umo-page-margin-right)"
             ></div>
-          </div>
+          </div> -->
         </t-watermark>
       </div>
     </div>

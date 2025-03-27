@@ -1,9 +1,5 @@
 <template>
-  <menus-button
-    ico="image-preview"
-    :text="t('bubbleMenu.image.preview')"
-    @menu-click="openImageViewer"
-  />
+  <menus-button ico="image-preview" :text="t('bubbleMenu.image.preview')" @menu-click="openImageViewer" />
 </template>
 
 <script setup lang="ts">
