@@ -54,7 +54,7 @@ export default Extension.create({
         },
       deleteSelectionNode:
         () =>
-        ({ editor, chain }) => {
+        ({ editor, commands }) => {
           const node = getSelectionNode(editor)
           if (!node) {
             return false
@@ -73,22 +73,8 @@ export default Extension.create({
               const { id, src } = node.attrs
               options.onFileDelete?.(id, src)
             }
-            if (editor.isActive('textBox')) {
-              return chain().focus().deleteNode('textBox').run()
-            }
-            chain().focus().deleteSelection().run()
-            return true
           }
-          if (editor.isActive('table')) {
-            editor.commands.selectParentNode()
-            chain().focus().deleteTable().run()
-            return true
-          }
-          return chain()
-            .focus()
-            .deleteSelection()
-            .deleteNode(node.type.name)
-            .run()
+          return commands.deleteSelection()
         },
     }
   },
@@ -96,9 +82,7 @@ export default Extension.create({
 export function getSelectionNode(editor: Editor) {
   // @ts-ignore
   const { $anchor, node } = editor.state.selection
-  // console.log('editor',editor)
-  // console.log('$anchor, node',$anchor.node(1), node)
-  if(node?.type?.isAtom) {
+  if (node?.type?.isAtom) {
     return node
   }
   editor.commands.selectParentNode()

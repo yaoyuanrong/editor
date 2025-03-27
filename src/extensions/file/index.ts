@@ -2,6 +2,8 @@ import { mergeAttributes, Node } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
 import { ReplaceStep } from 'prosemirror-transform'
 
+import { shortId } from '@/utils/short-id'
+
 import NodeView from './node-view.vue'
 
 const mimeTypes: any = {
@@ -13,8 +15,15 @@ const mimeTypes: any = {
     'image/svg+xml',
     'image/apng',
   ],
-  video: ['video/mp4', 'video/webm', 'video/ogg'],
-  audio: ['audio/mp3', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/flac'],
+  video: ['video/mp4', 'video/mpeg', 'video/webm', 'video/ogg'],
+  audio: [
+    'audio/mp3',
+    'audio/mpeg',
+    'audio/wav',
+    'audio/ogg',
+    'audio/aac',
+    'audio/flac',
+  ],
 }
 
 const getAccept = (type: string, accept: string[]) => {
@@ -115,7 +124,7 @@ export default Node.create({
           })
         },
       insertFile:
-        ({ file, autoType, pos }) =>
+        ({ file, uploadFileMap, autoType, pos }) =>
         ({ editor, commands }) => {
           const { type, name, size } = file
           const { options } = editor.storage
@@ -131,7 +140,7 @@ export default Node.create({
             return false
           }
           const position = pos || editor.state.selection.anchor
-          let previewType = null
+          let previewType = 'file'
           // 图片
           if (type.startsWith('image/') && mimeTypes.image.includes(type)) {
             previewType = 'image'
@@ -145,21 +154,23 @@ export default Node.create({
             previewType = 'audio'
           }
           // 插入节点
+          const id = shortId(10)
+          uploadFileMap.set(id, file)
           return commands.insertContentAt(position, {
-            type: autoType ? (previewType ?? 'file') : 'file',
+            type: autoType ? previewType : 'file',
             attrs: {
+              id,
               [previewType === 'file' ? 'url' : 'src']:
                 URL.createObjectURL(file),
               name,
-              type,
+              type: type || 'unknown', // Ensure type is never null
               size,
-              file,
               previewType,
             },
           })
         },
       selectFiles:
-        (type, container = 'body', autoType = false) =>
+        (type, container = 'body', uploadFileMap, autoType = true) =>
         ({ editor }) => {
           console.log(editor)
           const { options } = editor.storage
@@ -187,7 +198,11 @@ export default Node.create({
           onChange((fileList) => {
             const files = Array.from(fileList ?? [])
             for (const file of files) {
-              bool = editor.chain().focus().insertFile({ file, autoType }).run()
+              bool = editor
+                .chain()
+                .focus()
+                .insertFile({ file, uploadFileMap, autoType })
+                .run()
             }
           })
           return bool

@@ -1,6 +1,6 @@
 <template>
-  <node-view-wrapper :id="node.attrs.id" ref="containerRef" class="umo-node-view"
-    :class="{ 'umo-floating-node': node.attrs.draggable }" :style="nodeStyle" @dblclick="openImageViewer">
+  <node-view-wrapper ref="containerRef" class="umo-node-view" :class="{ 'umo-floating-node': node.attrs.draggable }"
+    :style="nodeStyle" @dblclick="openImageViewer">
     <div class="umo-node-container umo-node-image" :class="{
       'is-loading': node.attrs.src && isLoading,
       'is-error': node.attrs.src && error,
@@ -44,6 +44,7 @@ import { base64ToFile } from 'file64'
 import { shortId } from '@/utils/short-id'
 
 const container = inject('container')
+const uploadFileMap = inject('uploadFileMap')
 const imageViewer = inject('imageViewer')
 const { node, updateAttributes } = defineProps(nodeViewProps)
 const options = inject('options')
@@ -70,14 +71,17 @@ const nodeStyle = $computed(() => {
 })
 
 const uploadImage = async () => {
-  if (node.attrs.uploaded || !node.attrs.file) {
+  if (node.attrs.uploaded || !node.attrs.id) {
     return
   }
   try {
-    const { id, url } =
-      (await options.value?.onFileUpload?.(node.attrs.file)) ?? {}
-    if (containerRef.value) {
-      updateAttributes({ id, src: url, file: null, uploaded: true })
+    if (uploadFileMap.value.has(node.attrs.id)) {
+      const file = uploadFileMap.value.get(node.attrs.id)
+      const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
+      if (containerRef.value) {
+        updateAttributes({ id, src: url, uploaded: true })
+      }
+      uploadFileMap.value.delete(node.attrs.id)
     }
   } catch (error) {
     useMessage('error', {
@@ -87,6 +91,7 @@ const uploadImage = async () => {
   }
 }
 const onLoad = async () => {
+  // updateAttributes({ error: false })
   if (node.attrs.width === null) {
     const { clientWidth = 1, clientHeight = 1 } = imageRef ?? {}
     const ratio = clientWidth / clientHeight

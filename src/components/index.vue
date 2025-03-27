@@ -118,6 +118,7 @@ const searchReplace = ref(false)
 const printing = ref(false)
 const fullscreen = ref(false)
 const exportFile = ref({ pdf: false, image: false })
+const uploadFileMap = ref(new Map())
 // const bookmark = ref(false)
 const destroyed = ref(false)
 provide('container', container)
@@ -132,6 +133,7 @@ provide('searchReplace', searchReplace)
 provide('printing', printing)
 provide('fullscreen', fullscreen)
 provide('exportFile', exportFile)
+provide('uploadFileMap', uploadFileMap)
 // provide('bookmark', bookmark)
 provide('destroyed', destroyed)
 
@@ -802,7 +804,7 @@ const saveContent = async (showMessage = true) => {
         json: editor.value?.getJSON(),
         text: editor.value?.getText(),
       },
-      page.value.value,
+      page.value,
       $document.value,
     )
     if (!success) {
