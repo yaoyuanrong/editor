@@ -42,12 +42,12 @@
     float: left;
 
     >* {
-      // position: relative;
-      // z-index: 1;
+      position: relative;
+      z-index: 1;
 
-      // +*:not(.umo-floating-node) {
-      //   margin-top: var(--umo-content-node-bottom);
-      // }
+      +*:not(.umo-floating-node) {
+        margin-top: var(--umo-content-node-bottom);
+      }
 
       &.umo-node-focused,
       &.ProseMirror-selectednoderange {
@@ -122,12 +122,12 @@
   }
 
   @media screen {
-    .umo-text-selection {
+    &:not(.is-readonly) .umo-text-selection {
       background-color: var(--umo-text-selection-background);
     }
 
     ::selection {
-      background-color: var(--umo-text-selection-background);
+      background-color: var(--umo-text-selection-background) !important;
     }
   }
 
@@ -376,7 +376,6 @@
     max-width: 100%;
     overflow-x: auto;
     .umo-scrollbar();
-    margin: .5rem -7px -2px
   }
 
   .resize-cursor {

@@ -47,6 +47,7 @@ let canvasContext = $ref(null);
 let originalImage = $ref(null);
 let currentEditingImg = $ref(null);
 let openImageViewer = () => {
+  console.log()
   searchReplace = true
   let image = getSelectionNode(editor.value)
   console.log(image)
@@ -56,10 +57,10 @@ let openImageViewer = () => {
 
 // 打开图片编辑器
 let openImageEditor = (imageSrc: string) => {
-  console.log('imageSrc', imageSrc)
   let img = new Image();
   img.crossOrigin = "anonymous"; // 请求匿名跨域访问
   img.src = imageSrc; // 设置图片源
+  console.log('imageSrc', img)
 
   img.onload = () => {
     originalImage = img;
@@ -86,6 +87,8 @@ let openImageEditor = (imageSrc: string) => {
     // 绘制缩放后的图像
     canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
     currentImage = canvasContext.getImageData(0, 0, canvas.width, canvas.height);
+    console.log(getStyledHTML(document.querySelector('.umo-editor')?.innerHTML))
+
   };
 }
 // 设置当前工具

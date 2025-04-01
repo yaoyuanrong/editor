@@ -1,23 +1,13 @@
 <template>
   <div class="umo-page-container">
-    <container-toc
-      v-if="pageOptions.showToc"
-      @close="pageOptions.showToc = false"
-    />
+    <container-toc v-if="pageOptions.showToc" @close="pageOptions.showToc = false" />
     <div class="umo-zoomable-container umo-scrollbar">
-      <div
-        class="umo-zoomable-content"
-        :style="{
-          width: pageZoomWidth,
-          height: pageZoomHeight,
-        }"
-      >
-        <t-watermark
-          class="umo-page-content"
-          :alpha="pageOptions.watermark.alpha"
-          v-bind="watermarkOptions"
-          :watermark-content="pageOptions.watermark"
-          :style="{
+      <div class="umo-zoomable-content" :style="{
+        width: pageZoomWidth,
+        height: pageZoomHeight,
+      }">
+        <t-watermark class="umo-page-content" :alpha="pageOptions.watermark.alpha" v-bind="watermarkOptions"
+          :watermark-content="pageOptions.watermark" :style="{
             '--umo-page-background': pageOptions.background,
             '--umo-page-margin-top': (pageOptions.margin?.top ?? '0') + 'cm',
             '--umo-page-margin-bottom':
@@ -29,8 +19,7 @@
             '--umo-page-height': pageSize.height + 'cm',
             width: pageSize.width + 'cm',
             transform: `scale(${pageOptions.zoomLevel ? pageOptions.zoomLevel / 100 : 1})`,
-          }"
-        >
+          }">
           <!-- <div class="umo-page-node-header" contenteditable="false">
             <div
               class="umo-page-corner corner-tl"
@@ -64,18 +53,10 @@
         </t-watermark>
       </div>
     </div>
-    <t-image-viewer
-      v-model:visible="imageViewer.visible"
-      v-model:index="currentImageIndex"
-      :images="previewImages"
-      @close="imageViewer.visible = false"
-    />
-    <t-back-top
-      :container="`${container} .umo-zoomable-container`"
-      :visible-height="800"
-      size="small"
-      :offset="['25px', '30px']"
-    />
+    <t-image-viewer v-model:visible="imageViewer.visible" v-model:index="currentImageIndex" :images="previewImages"
+      @close="imageViewer.visible = false" />
+    <t-back-top :container="`${container} .umo-zoomable-container`" :visible-height="800" size="small"
+      :offset="['25px', '30px']" />
     <container-search-replace />
     <container-print />
   </div>
@@ -199,11 +180,13 @@ watch(
   flex: 1;
   padding: 20px 50px;
   scroll-behavior: smooth;
+
   .umo-zoomable-content {
     margin: 0 auto;
     box-shadow:
       rgba(0, 0, 0, 0.06) 0px 0px 10px 0px,
       rgba(0, 0, 0, 0.04) 0px 0px 0px 1px;
+
     .umo-page-content {
       transform-origin: 0 0;
       box-sizing: border-box;
@@ -216,6 +199,7 @@ watch(
       overflow: hidden;
       display: flex;
       flex-direction: column;
+
       [contenteditable] {
         outline: none;
       }
@@ -294,17 +278,16 @@ watch(
 .umo-page-node-content {
   position: relative;
   box-sizing: border-box;
-  min-height: calc(
-    var(--umo-page-height) - var(--umo-page-margin-top) -
-      var(--umo-page-margin-bottom)
-  );
+  min-height: calc(var(--umo-page-height) - var(--umo-page-margin-top) - var(--umo-page-margin-bottom));
 }
 
 :deep(.umo-back-top) {
   position: absolute;
+
   &:hover {
     opacity: 0.9;
     background-color: var(--umo-color-white) !important;
+
     .umo-back-top__icon {
       color: var(--umo-primary-color);
     }

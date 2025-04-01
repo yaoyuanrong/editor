@@ -29,8 +29,8 @@ const templates = [
 ]
 const options = $ref({
   toolbar: {
-    defaultMode: 'classic',
-    menus: ['base', 'insert', 'table', 'tools', 'page'],
+    // defaultMode: 'classic',
+    menus: ['base', 'insert', 'table', 'tools', 'page', 'export'],
     enableSourceEditor: true,
   },
   document: {
@@ -74,15 +74,15 @@ const options = $ref({
   async onSave(content: string, page: number, document: { content: string }) {
     localStorage.setItem('document.content', document.content)
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const success = true
-        if (success) {
-          console.log('onSave', { content, page, document })
-          resolve('操作成功')
-        } else {
-          reject(new Error('操作失败'))
-        }
-      }, 2000)
+      // setTimeout(() => {
+      const success = true
+      if (success) {
+        console.log('onSave', { content, page, document })
+        resolve('操作成功')
+      } else {
+        reject(new Error('操作失败'))
+      }
+      // }, 2000)
     })
   },
   async onFileUpload(file: File & { url?: string }) {

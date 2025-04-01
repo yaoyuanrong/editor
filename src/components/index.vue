@@ -68,6 +68,7 @@ import { getOpitons } from '@/utils/options'
 import { shortId } from '@/utils/short-id'
 
 import ruConfig from '../locales/tdesign/ru-RU'
+import { printUtils } from './word'
 
 const { toBlob, toJpeg, toPng } = domToImage
 
@@ -784,7 +785,22 @@ const destroy = () => {
   removeAllHotkeys()
   destroyed.value = true
 }
+const defaultLineHeight = $computed(
+  () =>
+    options.value.dicts?.lineHeights.find(
+      (item: { default: any }) => item.default,
+    )?.value,
+)
+const getIframeCode = () => {
+  editor.value?.commands.blur()
+  return printUtils.getIframeCode(
+    options.value,
+    page.value,
+    container,
+    defaultLineHeight
+  )
 
+}
 // Content Saving Methods
 const saveContent = async (showMessage = true) => {
   if ($toolbar.value.mode === 'source' || options.value.document?.readOnly) {
@@ -803,6 +819,7 @@ const saveContent = async (showMessage = true) => {
         html: editor.value?.getHTML(),
         json: editor.value?.getJSON(),
         text: editor.value?.getText(),
+        code: printUtils.getStyledHTML()
       },
       page.value,
       $document.value,

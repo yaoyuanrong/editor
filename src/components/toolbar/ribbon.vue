@@ -66,7 +66,7 @@
             <menus-toolbar-base-search-replace />
           </div>
           <div class="umo-virtual-group">
-            <!-- <menus-toolbar-base-print v-if="!disableItem('print')" /> -->
+            <menus-toolbar-base-print v-if="!disableItem('print')" />
           </div>
           <div class="virtual-group is-slot">
             <slot name="toolbar_base" toolbar-mode="ribbon" />
