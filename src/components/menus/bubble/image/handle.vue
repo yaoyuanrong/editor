@@ -87,8 +87,6 @@ let openImageEditor = (imageSrc: string) => {
     // 绘制缩放后的图像
     canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
     currentImage = canvasContext.getImageData(0, 0, canvas.width, canvas.height);
-    console.log(getStyledHTML(document.querySelector('.umo-editor')?.innerHTML))
-
   };
 }
 // 设置当前工具

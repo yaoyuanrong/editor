@@ -25,6 +25,7 @@ export const printUtils = {
     ];
     // 遍历所有元素
     elements?.forEach(el => {
+      if(el.className.includes('es-drager-dot')) return;
       const computedStyle = window.getComputedStyle(el);
   
       // 收集有效的样式
@@ -33,10 +34,12 @@ export const printUtils = {
           const value = computedStyle.getPropertyValue(prop);
           // 过滤掉默认值和空值
           return value &&
+            value !== '0px' &&
             value !== 'normal' &&
             value !== 'none' &&
             value !== 'initial' &&
-            value !== 'SimSun, 宋体-简, "PingFang sc", "helvetica neue", helvetica, "hiragino sans gb", "microsoft yahei", sans-serif' && 
+            value !== '0px none rgb(51, 51, 51)' &&
+            value !== 'rgba(0, 0, 0, 0)'&&
             value !== 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
             ? `${prop}: ${value}`
             : null;

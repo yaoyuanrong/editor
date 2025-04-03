@@ -71,18 +71,21 @@ const nodeStyle = $computed(() => {
 })
 
 const uploadImage = async () => {
-  if (node.attrs.uploaded || !node.attrs.id) {
+  if (
+    node.attrs.uploaded ||
+    !node.attrs.id ||
+    !uploadFileMap.value.has(node.attrs.id)
+  ) {
+    updateAttributes({ uploaded: true })
     return
   }
   try {
-    if (uploadFileMap.value.has(node.attrs.id)) {
-      const file = uploadFileMap.value.get(node.attrs.id)
-      const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
-      if (containerRef.value) {
-        updateAttributes({ id, src: url, uploaded: true })
-      }
-      uploadFileMap.value.delete(node.attrs.id)
+    const file = uploadFileMap.value.get(node.attrs.id)
+    const { id, url } = (await options.value?.onFileUpload?.(file)) ?? {}
+    if (containerRef.value) {
+      updateAttributes({ id, src: url, uploaded: true })
     }
+    uploadFileMap.value.delete(node.attrs.id)
   } catch (error) {
     useMessage('error', {
       attach: container,
@@ -124,7 +127,12 @@ onClickOutside(containerRef, () => {
   selected = false
 })
 
-const openImageViewer = () => {
+const openImageViewer = async () => {
+  const id = shortId(10)
+  if (node.attrs.id === null) {
+    updateAttributes({ id })
+  }
+  await nextTick()
   imageViewer.value.visible = true
   imageViewer.value.current = node.attrs.id
 }

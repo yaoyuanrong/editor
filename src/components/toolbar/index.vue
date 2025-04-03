@@ -12,11 +12,9 @@
         <slot :name="`toolbar_${item}`" v-bind="props" />
       </template>
     </toolbar-classic>
-    <toolbar-source v-if="$toolbar.mode === 'source' && options.toolbar?.enableSourceEditor" />
-    <!-- <div class="umo-toolbar-actions" :class="$toolbar.mode">
-      <t-popup v-if="$toolbar.mode !== 'source' && options.document.readOnly !== true" v-model="statusPopup"
-        :attach="container" trigger="click" placement="bottom-right"
-        @visible-change="(visible: boolean) => (statusPopup = visible)">
+    <div class="umo-toolbar-actions" :class="$toolbar.mode">
+      <!-- <t-popup v-if="options.document.readOnly !== true" v-model="statusPopup" :attach="container" trigger="click"
+        placement="bottom-right" @visible-change="(visible: boolean) => (statusPopup = visible)">
         <t-button class="umo-toolbar-actions-button" variant="text" size="small" :class="{ active: statusPopup }">
           <span class="umo-status">
             <span class="umo-status-online" :class="{ offline: !online }"></span>
@@ -44,8 +42,8 @@
             </div>
           </div>
         </template>
-      </t-popup>
-      <t-dropdown trigger="click" size="small" placement="bottom-right" :popup-props="{
+      </t-popup> -->
+      <!-- <t-dropdown trigger="click" size="small" placement="bottom-right" :popup-props="{
         destroyOnClose: true,
         attach: container,
       }" @click="toggleToolbarMode">
@@ -61,8 +59,8 @@
             </template>
           </t-dropdown-menu>
         </template>
-      </t-dropdown>
-    </div> -->
+      </t-dropdown> -->
+    </div>
   </div>
   <tooltip v-else :content="t('toolbar.show')" placement="bottom-right">
     <div class="umo-show-toolbar" @click="$toolbar.show = true">
@@ -118,39 +116,23 @@ watch(
 )
 
 // 切换编辑器模式
-const editorModeOptions = computed(() => {
-  const modeOptions: {
-    value: string
-    label: string
-    prefixIcon: string
-    divider?: boolean
-  }[] = [
-      {
-        label: t('toolbar.ribbon'),
-        value: 'ribbon',
-        prefixIcon: 'toolbar-ribbon',
-      },
-      {
-        label: t('toolbar.classic'),
-        value: 'classic',
-        prefixIcon: 'toolbar-classic',
-      },
-      {
-        label: t('toolbar.hide'),
-        value: 'hideToolbar',
-        prefixIcon: 'hide-toolbar',
-      },
-    ]
-  if (options.value.toolbar?.enableSourceEditor) {
-    modeOptions.splice(2, 0, {
-      label: t('toolbar.source'),
-      value: 'source',
-      prefixIcon: 'toolbar-source',
-      divider: true,
-    })
-  }
-  return modeOptions
-})
+const editorModeOptions = [
+  {
+    label: t('toolbar.ribbon'),
+    value: 'ribbon',
+    prefixIcon: 'toolbar-ribbon',
+  },
+  {
+    label: t('toolbar.classic'),
+    value: 'classic',
+    prefixIcon: 'toolbar-classic',
+  },
+  {
+    label: t('toolbar.hide'),
+    value: 'hideToolbar',
+    prefixIcon: 'hide-toolbar',
+  },
+]
 
 const toggleToolbarMode = ({ value }: DropdownOption) => {
   if (value === 'hideToolbar') {

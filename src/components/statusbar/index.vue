@@ -658,6 +658,11 @@ watch(
     font-size: 12px;
     color: var(--umo-text-color-light);
 
+    ul {
+      padding: 0;
+      margin: 0;
+    }
+
     li {
       list-style: none;
       cursor: default;

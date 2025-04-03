@@ -6,14 +6,13 @@
     <div :id="container.substr(1)" class="umo-editor-container" :class="{
       'toolbar-classic': isRecord($toolbar) && $toolbar.mode === 'classic',
       'toolbar-ribbon': isRecord($toolbar) && $toolbar.mode === 'ribbon',
-      'toolbar-source': isRecord($toolbar) && $toolbar.mode === 'source',
       'preview-mode': page.preview?.enabled,
       'laser-pointer': page.preview?.enabled && page.preview?.laserPointer,
       'umo-editor-is-fullscreen': fullscreen,
     }" :style="{
-      height: options.height,
-      zIndex: fullscreen ? options.fullscreenZIndex : 'unset',
-    }">
+        height: options.height,
+        zIndex: fullscreen ? options.fullscreenZIndex : 'unset',
+      }">
       <header class="umo-toolbar">
         <toolbar :key="toolbarKey" @menu-change="(event: any) => emits('menuChange', event)">
           <template v-for="item in options.toolbar?.menus" :key="item" #[`toolbar_${item}`]="slotProps">
@@ -22,14 +21,13 @@
         </toolbar>
       </header>
       <main class="umo-main">
-        <container-page v-if="$toolbar.mode !== 'source'">
+        <container-page>
           <template #bubble_menu="slotProps">
             <slot name="bubble_menu" v-bind="slotProps" />
           </template>
         </container-page>
-        <editor-source v-else />
       </main>
-      <footer v-if="$toolbar.mode !== 'source'" class="umo-footer">
+      <footer class="umo-footer">
         <statusbar />
       </footer>
     </div>
@@ -739,7 +737,7 @@ const print = () => {
   if (toolbar?.disableMenuItems.includes('print') || editor.value?.isEmpty) {
     return
   }
-  if ($toolbar.value.mode !== 'source' && !document?.readOnly) {
+  if (!document?.readOnly) {
     printing.value = true
   }
 }
@@ -803,7 +801,7 @@ const getIframeCode = () => {
 }
 // Content Saving Methods
 const saveContent = async (showMessage = true) => {
-  if ($toolbar.value.mode === 'source' || options.value.document?.readOnly) {
+  if (options.value.document?.readOnly) {
     return
   }
   try {
@@ -911,14 +909,6 @@ const getContentExcerpt = (charLimit = 100, more = ' ...') => {
   return text?.substring(0, charLimit) + more
 }
 
-// Toolbar Mode Reset
-watch(
-  () => $toolbar.value.mode,
-  (val: any) => {
-    destroyed.value = val === 'source'
-  },
-)
-
 // Hotkeys Setup
 watch(
   () => editor.value,
@@ -1003,6 +993,11 @@ defineExpose({
   blur,
   toggleFullscreen,
   reset,
+  destroy,
+  focusBookmark,
+  getAllBookmarks,
+  setBookmark,
+  deleteBookmark,
   useAlert(pramas: DialogOptions) {
     return useAlert({ attach: container, ...pramas })
   },
@@ -1012,11 +1007,6 @@ defineExpose({
   useMessage(type: string, pramas: MessageOptions) {
     return useMessage(type, { attach: container, ...pramas })
   },
-  destroy,
-  focusBookmark,
-  getAllBookmarks,
-  setBookmark,
-  deleteBookmark,
 })
 </script>
 
