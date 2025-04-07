@@ -1,57 +1,75 @@
 export const printUtils = {
+  stylesToCapture: [
+    'display','width','color','background-color',
+    'font-weight','font-style','font-size','text-align',
+    'margin','padding','border','line-height','letter-spacing',
+    'font-family','background','justify-content','position','text-indent'
+  ],
+  // 默认值列表
+  defaultValues: [
+    'table-column-group', 'table-row-group', 'table-row', 'table-cell',
+    'static', 'normal', 'counter-increment', 'content',
+    'none', 'initial',
+    '0px none rgb(51, 51, 51)',
+    'rgba(0, 0, 0, 0)',
+    'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
+  ],
+  // 判断样式值是否为默认值
+  isDefaultValue(value:string): boolean {
+    return this.defaultValues.includes(value);
+  },
+  // 处理图片元素的特殊逻辑
+  processImageElement(imgElement:HTMLImageElement, computedStyle: CSSStyleDeclaration): string[] {
+    // 从计算样式中提取宽高并设置为HTML属性
+    const width = computedStyle.getPropertyValue('width');
+    const height = computedStyle.getPropertyValue('height');
+    // 清除可能已存在的width/height属性
+    imgElement.removeAttribute('width');
+    imgElement.removeAttribute('height');
+    // 设置width和height为HTML属性
+    if (width && !this.isDefaultValue(width)) {
+      imgElement.setAttribute('width', String(parseInt(width)));
+    }
+    if (height && !this.isDefaultValue(height)) {
+      imgElement.setAttribute('height', String(parseInt(height)));
+    }
+    // 收集除宽高外的其他样式
+    return this.collectStyles(computedStyle, ['width', 'height']);
+  },
+  // 收集元素的有效样式
+  collectStyles(computedStyle: CSSStyleDeclaration, excludeProps : string[] = []): string[] {
+    return this.stylesToCapture
+      .filter(prop => !excludeProps.includes(prop))
+      .filter(prop => {
+        const value = computedStyle.getPropertyValue(prop);
+        return value && !this.isDefaultValue(value);
+      })
+      .map(prop => `${prop}: ${computedStyle.getPropertyValue(prop)}`);
+  },
+  // 处理单个元素的样式
+  processElementStyles(element: Element): void  {
+    if (element.className?.includes('es-drager-dot')) return;
+    const computedStyle = window.getComputedStyle(element);
+    let inlineStyles = [];
+    // 图片元素特殊处理
+    if (element.tagName.toLowerCase() === 'img') {
+      inlineStyles = this.processImageElement(element as HTMLImageElement, computedStyle);
+    } else {
+      inlineStyles = this.collectStyles(computedStyle);
+    }
+    // 应用内联样式
+    if (inlineStyles.length > 0) {
+      element.setAttribute('style', inlineStyles.join('; '));
+    }
+  },
   getStyledHTML:() => {
-    const tempDiv = document.querySelector('.umo-editor');
-    // 遍历所有元素添加内联样式
-    const elements = tempDiv?.querySelectorAll('*');
-    // 需要捕获的样式属性
-    const stylesToCapture = [
-      'display',
-      'width',
-      'color',
-      'background-color',
-      'font-weight',
-      'font-style',
-      'font-size',
-      'text-align',
-      'margin',
-      'padding',
-      'border',
-      'line-height',
-      'letter-spacing',
-      'font-family',
-      'background',
-      'justify-content',
-      'position'
-    ];
-    // 遍历所有元素
-    elements?.forEach(el => {
-      if(el.className.includes('es-drager-dot')) return;
-      const computedStyle = window.getComputedStyle(el);
-  
-      // 收集有效的样式
-      const inlineStyle = stylesToCapture
-        .map(prop => {
-          const value = computedStyle.getPropertyValue(prop);
-          // 过滤掉默认值和空值
-          return value &&
-            value !== '0px' &&
-            value !== 'normal' &&
-            value !== 'none' &&
-            value !== 'initial' &&
-            value !== '0px none rgb(51, 51, 51)' &&
-            value !== 'rgba(0, 0, 0, 0)'&&
-            value !== 'rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box'
-            ? `${prop}: ${value}`
-            : null;
-        })
-        .filter(style => style !== null);
-  
-      // 如果有有效样式，则添加到元素
-      if (inlineStyle.length > 0) {
-        el.setAttribute('style', inlineStyle.join('; '));
-      }
-    });
-    let htmlContent = `
+    const editorElement = document.querySelector('.umo-editor');
+    if (!editorElement) return '';
+    // 处理所有元素的样式
+    const elements = editorElement.querySelectorAll('*');
+    elements.forEach(el => printUtils.processElementStyles(el));
+    // 构建完整的HTML文档
+    return `
     <!DOCTYPE html>
     <html xmlns:o='urn:schemas-microsoft-com:office:office' 
           xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -60,19 +78,18 @@ export const printUtils = {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body >
+    <body>
       <div id="sprite-plyr" style="display: none;">
-      ${printUtils.getPlyrSprite()}
+        ${printUtils.getPlyrSprite()}
       </div>
       <div class="umo-editor-container" aria-expanded="false">
         <div class="tiptap umo-editor" translate="no">
-          ${tempDiv?.innerHTML}
+          ${editorElement.innerHTML}
         </div>
       </div>
-      
     </body>
-    </html>`
-    return htmlContent;
+    </html>`;
+
   },
   getStylesHtml: () => {
     return Array.from(document.querySelectorAll('link, style'))
