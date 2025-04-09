@@ -1,5 +1,5 @@
 export const printUtils = {
-  stylesToCapture: [
+  stylesToCapture:[
     'display','width','color','background-color',
     'font-weight','font-style','font-size','text-align',
     'margin','padding','border','line-height','letter-spacing',
@@ -66,7 +66,8 @@ export const printUtils = {
     const editorElement = document.querySelector('.umo-editor');
     if (!editorElement) return '';
     // 处理所有元素的样式
-    const elements = editorElement.querySelectorAll('*');
+    const elements = editorElement.querySelectorAll('*:not([class*="es-drager-dot"]):not([class*="es-drager"])');
+    console.log('elements',elements)
     elements.forEach(el => printUtils.processElementStyles(el));
     // 构建完整的HTML文档
     return `

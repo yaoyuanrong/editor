@@ -30,6 +30,7 @@ const templates = [
 const options = $ref({
   toolbar: {
     // defaultMode: 'classic',
+    disableMenuItems: ['exportImage'],
     menus: ['base', 'insert', 'table', 'tools', 'page', 'export'],
   },
   document: {

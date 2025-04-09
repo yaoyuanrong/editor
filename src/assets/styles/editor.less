@@ -1,4 +1,17 @@
 @import '@/assets/styles/_mixins.less';
+@media screen {
+  .umo-editor-content .umo-text-selection {
+    background-color: var(--umo-text-selection-background);
+  }
+
+  &:not(.is-readonly) .umo-text-selection {
+    background-color: var(--umo-text-selection-background);
+  }
+
+  ::selection {
+    background-color: var(--umo-text-selection-background);
+  }
+}
 
 .umo-editor-content {
   accent-color: var(--umo-primary-color);
@@ -123,15 +136,6 @@
     }
   }
 
-  @media screen {
-    &:not(.is-readonly) .umo-text-selection {
-      background-color: var(--umo-text-selection-background);
-    }
-
-    ::selection {
-      background-color: var(--umo-text-selection-background) !important;
-    }
-  }
 
   a {
     color: var(--umo-primary-color);
