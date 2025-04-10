@@ -1,14 +1,7 @@
 <template>
-  <bubble-menu
-    v-show="!editor?.view?.painter?.enabled && !editor?.isEmpty"
-    class="umo-editor-bubble-menu"
-    :class="{ assistant }"
-    :editor="editor!"
-    :tippy-options="tippyOpitons"
-  >
-    <menus-bubble-menus
-      v-if="options?.document?.enableBubbleMenu && !assistant"
-    >
+  <bubble-menu v-show="!editor?.view?.painter?.enabled && !editor?.isEmpty" class="umo-editor-bubble-menu"
+    :class="{ assistant }" :editor="editor!" :tippy-options="tippyOpitons">
+    <menus-bubble-menus v-if="options?.document?.enableBubbleMenu && !assistant">
       <template #bubble_menu="props">
         <slot name="bubble_menu" v-bind="props" />
       </template>
@@ -28,9 +21,14 @@ const options = inject('options')
 // 气泡菜单
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
-  appendTo: 'parent',
+  appendTo: (reference) => {
+    return reference.closest('.editor-container') || document.body;
+  },
   maxWidth: 580,
-  zIndex: 110,
+  placement: 'top', // 菜单显示在文本上方
+  offset: [0, 20], // 向上偏移10px
+  interactive: true,
+  animateFill: false,
   onShow(instance: Instance) {
     tippyInstance = instance
   },

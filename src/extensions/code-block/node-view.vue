@@ -9,14 +9,16 @@
               overlayClassName: 'umo-code-block-language',
             }" filterable borderless @menu-click="(value: string) => updateAttribute('language', value)" />
           <menus-button :text="t('bubbleMenu.code.themes.text')" menu-type="select" style="width: 100px"
-            :select-options="themeOptions" :select-value="node.attrs.theme" borderless
+            :select-options="themeOptions" :select-value="node.attrs.theme" force-enabled borderless
             @menu-click="(value: string) => updateAttribute('theme', value)" />
         </div>
         <div class="umo-node-code-block-toolbar-right">
           <menus-button :text="t('bubbleMenu.code.wordWrap')" ico="code-word-wrap" :menu-active="node.attrs.wordWrap"
-            hide-text @menu-click="updateAttribute('wordWrap', !node.attrs.wordWrap)" />
-          <menus-button ico="copy" :text="t('bubbleMenu.code.copy.text')" hide-text @menu-click="copyCode" />
-          <menus-button ico="node-delete" :text="t('bubbleMenu.delete')" hide-text @menu-click="deleteNode" />
+            hide-text force-enabled @menu-click="updateAttribute('wordWrap', !node.attrs.wordWrap)" />
+          <menus-button ico="copy" :text="t('bubbleMenu.code.copy.text')" hide-text force-enabled
+            @menu-click="copyCode" />
+          <menus-button v-if="editor?.isEditable" ico="node-delete" :text="t('bubbleMenu.delete')" hide-text
+            @menu-click="deleteNode" />
         </div>
       </div>
       <pre class="umo-node-code-block-content" :class="{
@@ -38,6 +40,7 @@ const { node, updateAttributes, deleteNode } = defineProps(nodeViewProps)
 const lowlight = createLowlight(common)
 
 const container = inject('container')
+const editor = inject('editor')
 const containerRef = ref(null)
 
 const languageOptions = lowlight.listLanguages().map((item) => {

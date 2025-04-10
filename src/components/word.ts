@@ -67,7 +67,6 @@ export const printUtils = {
     if (!editorElement) return '';
     // 处理所有元素的样式
     const elements = editorElement.querySelectorAll('*:not([class*="es-drager-dot"]):not([class*="es-drager"])');
-    console.log('elements',elements)
     elements.forEach(el => printUtils.processElementStyles(el));
     // 构建完整的HTML文档
     return `

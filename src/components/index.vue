@@ -10,9 +10,9 @@
       'laser-pointer': page.preview?.enabled && page.preview?.laserPointer,
       'umo-editor-is-fullscreen': fullscreen,
     }" :style="{
-        height: options.height,
-        zIndex: fullscreen ? options.fullscreenZIndex : 'unset',
-      }">
+      height: options.height,
+      zIndex: fullscreen ? options.fullscreenZIndex : 'unset',
+    }">
       <header class="umo-toolbar">
         <toolbar :key="toolbarKey" @menu-change="(event: any) => emits('menuChange', event)">
           <template v-for="item in options.toolbar?.menus" :key="item" #[`toolbar_${item}`]="slotProps">
@@ -156,7 +156,7 @@ watch(
       showBookmark,
       showLineNumber: false,
       showToc: false,
-      zoomLevel: 100,
+      zoomLevel: 120,
       autoWidth: false,
       preview: {
         enabled: false,
