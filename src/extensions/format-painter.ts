@@ -75,7 +75,6 @@ export default Extension.create({
               // 通过 view 传值，方便获取，但是不建议这样做
               // @ts-ignore
               const { painter } = view
-
               if (!marks || marks.length === 0) {
                 return false // 如果没有标记，则不执行任何操作
               }

@@ -9,6 +9,7 @@
         color: node.attrs.fontColor,
         backgroundColor: node.attrs.backgroundColor,
       }">
+
         <span v-if="node.attrs.icon" class="umo-node-callout-icon" contenteditable="false">{{ node.attrs.icon }}</span>
         <node-view-content class="umo-node-callout-content" :class="{
           'umo-node-callout-empty': node.content.size <= 2,

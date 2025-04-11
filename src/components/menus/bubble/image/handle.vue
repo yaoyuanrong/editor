@@ -281,6 +281,8 @@ function generateSmoothMosaicColor(ctx: CanvasRenderingContext2D, x: number, y: 
 </script>
 <style lang="less">
 .umo-search-replace-dialog {
+  z-index: 50000 !important;
+
   .umo-dialog {
     width: auto;
     right: auto;

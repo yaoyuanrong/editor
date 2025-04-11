@@ -825,17 +825,6 @@ const saveContent = async (showMessage = true) => {
       page.value,
       $document.value,
     )
-    if (!success) {
-      MessagePlugin.closeAll()
-      useMessage('error', {
-        attach: container,
-        content: t('save.failed'),
-        placement: 'bottom',
-        offset: [0, -20],
-      })
-      return
-    }
-    emits('saved')
     if (showMessage) {
       MessagePlugin.closeAll()
       useMessage('success', {

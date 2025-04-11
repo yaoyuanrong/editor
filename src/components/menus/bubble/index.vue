@@ -21,14 +21,13 @@ const options = inject('options')
 // 气泡菜单
 let tippyInstance = $ref<Instance | null>(null)
 const tippyOpitons = $ref<Partial<Instance>>({
-  appendTo: (reference) => {
+  appendTo: (reference: any) => {
     return reference.closest('.editor-container') || document.body;
   },
   maxWidth: 580,
   placement: 'top', // 菜单显示在文本上方
   offset: [0, 20], // 向上偏移10px
   interactive: true,
-  animateFill: false,
   onShow(instance: Instance) {
     tippyInstance = instance
   },
